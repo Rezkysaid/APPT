@@ -42,6 +42,115 @@ firebase.initializeApp({
 });
 const db = firebase.database();
 
+
+// ── TRANSLATIONS ──
+const LANG = {
+  ms: {
+    appSub:      "INSPIRASI VIDEO",
+    save:        "+ Simpan",
+    all:         "Semua",
+    latest:      "Terbaru",
+    topRated:    "Terbaik",
+    search:      "Cari...",
+    vaultEmpty:  "Vault Kosong",
+    vaultDesc:   "{t.vaultDesc}",
+    saveFirst:   "+ Simpan Video Pertama",
+    connecting:  "Menyambung...",
+    saveVideo:   "Simpan Video",
+    saveSubtitle:"Tambah ke TrendVault",
+    urlLabel:    "URL VIDEO",
+    titleLabel:  "TAJUK",
+    savedByLabel:"DISIMPAN OLEH",
+    notesLabel:  "NOTA",
+    catLabel:    "KATEGORI",
+    ratingLabel: "PENILAIAN",
+    simpan:      "Simpan →",
+    saving:      "Menyimpan...",
+    urlPh:       "https://tiktok.com/@...",
+    titlePh:     "Apa yang menarik?",
+    savedByPh:   "Nama kau",
+    notesPh:     "Nota pasal video ni...",
+    comment:     "Tulis komen...",
+    noComment:   "Belum ada komen",
+    builtBy:     "Dibina oleh",
+    updated:     "Dikemaskini ✓",
+    removed:     "Dipadam",
+    saved:       "Disimpan! 🔥",
+    statuses:    ["Disimpan","Sedang Dibuat","Digunakan"],
+    cats:        ["Hook","Transisi","Demo Produk","Penceritaan","Audio Trending","CTA","Lain-lain"],
+  },
+  en: {
+    appSub:      "VIDEO INSPIRATION",
+    save:        "+ Save",
+    all:         "All",
+    latest:      "Latest",
+    topRated:    "Top Rated",
+    search:      "Search...",
+    vaultEmpty:  "Vault Empty",
+    vaultDesc:   "Save trending videos from TikTok, Instagram & Facebook as inspiration for your team",
+    saveFirst:   "+ Save First Video",
+    connecting:  "Connecting...",
+    saveVideo:   "Save Video",
+    saveSubtitle:"Add to TrendVault",
+    urlLabel:    "VIDEO URL",
+    titleLabel:  "TITLE",
+    savedByLabel:"SAVED BY",
+    notesLabel:  "NOTES",
+    catLabel:    "CATEGORY",
+    ratingLabel: "RATING",
+    simpan:      "Save →",
+    saving:      "Saving...",
+    urlPh:       "https://tiktok.com/@...",
+    titlePh:     "What's interesting about this?",
+    savedByPh:   "Your name",
+    notesPh:     "Notes about this video...",
+    comment:     "Write a comment...",
+    noComment:   "No comments yet",
+    builtBy:     "Built by",
+    updated:     "Updated ✓",
+    removed:     "Removed",
+    saved:       "Saved! 🔥",
+    statuses:    ["Saved","In Progress","Used"],
+    cats:        ["Hook","Transition","Product Demo","Storytelling","Trending Audio","CTA","Others"],
+  },
+  zh: {
+    appSub:      "视频灵感库",
+    save:        "+ 保存",
+    all:         "全部",
+    latest:      "最新",
+    topRated:    "最高评分",
+    search:      "搜索...",
+    vaultEmpty:  "库是空的",
+    vaultDesc:   "保存来自TikTok、Instagram和Facebook的热门视频，作为团队的创作灵感",
+    saveFirst:   "+ 保存第一个视频",
+    connecting:  "连接中...",
+    saveVideo:   "保存视频",
+    saveSubtitle:"添加到 TrendVault",
+    urlLabel:    "视频链接",
+    titleLabel:  "标题",
+    savedByLabel:"保存者",
+    notesLabel:  "备注",
+    catLabel:    "类别",
+    ratingLabel: "评分",
+    simpan:      "保存 →",
+    saving:      "保存中...",
+    urlPh:       "https://tiktok.com/@...",
+    titlePh:     "这个视频有什么亮点？",
+    savedByPh:   "你的名字",
+    notesPh:     "关于这个视频的备注...",
+    comment:     "写评论...",
+    noComment:   "暂无评论",
+    builtBy:     "由...构建",
+    updated:     "已更新 ✓",
+    removed:     "已删除",
+    saved:       "已保存! 🔥",
+    statuses:    ["已保存","进行中","已使用"],
+    cats:        ["钩子","转场","产品演示","故事叙述","热门音乐","行动号召","其他"],
+  },
+};
+
+const LANG_LABELS = { ms:"BM", en:"EN", zh:"中文" };
+
 // Design tokens
 const P = {
   TikTok:    {accent:"#FE2C55",glow:"rgba(254,44,85,0.25)",grad:"linear-gradient(135deg,#FE2C55,#FF7043)"},
@@ -74,7 +183,7 @@ function Stars({val,onChange}) {
   );
 }
 
-function Card({v,onUpdate,onDelete}) {
+function Card({v,onUpdate,onDelete,t}) {
   const [showC,setShowC] = useState(false);
   const [txt,setTxt]     = useState("");
   const cardRef = useRef(null);
@@ -183,7 +292,7 @@ function Card({v,onUpdate,onDelete}) {
             <div style={{display:"flex",gap:6,marginTop:6}}>
               <input value={txt} onChange={e=>setTxt(e.target.value)}
                 onKeyDown={e=>e.key==="Enter"&&postComment()}
-                placeholder="Tulis comment..."
+                placeholder={t.comment}
                 style={{flex:1,background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.1)",
                   borderRadius:8,padding:"7px 10px",color:"#f5f5f7",fontSize:12,outline:"none"}}/>
               <button onClick={postComment}
@@ -197,7 +306,7 @@ function Card({v,onUpdate,onDelete}) {
   );
 }
 
-function Modal({onAdd,onClose}) {
+function Modal({onAdd,onClose,t,lang}) {
   const [f,setF] = useState({url:"",title:"",platform:"TikTok",category:"Hook",notes:"",rating:3,savedBy:"Ali"});
   const [saving,setSaving] = useState(false);
   const set = (k,v) => setF(x=>({...x,[k]:v}));
@@ -240,8 +349,8 @@ function Modal({onAdd,onClose}) {
 
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:22}}>
           <div>
-            <div style={{fontSize:20,fontWeight:900,color:"#f5f5f7",letterSpacing:-0.5}}>Save Video</div>
-            <div style={{fontSize:11,color:"#636366",marginTop:2}}>Tambah ke TrendVault</div>
+            <div style={{fontSize:20,fontWeight:900,color:"#f5f5f7",letterSpacing:-0.5}}>{t.saveVideo}</div>
+            <div style={{fontSize:11,color:"#636366",marginTop:2}}>{t.saveSubtitle}</div>
           </div>
           <button onClick={onClose} style={{width:30,height:30,borderRadius:"50%",
             background:"rgba(255,255,255,0.08)",border:"1px solid rgba(255,255,255,0.1)",
@@ -268,10 +377,10 @@ function Modal({onAdd,onClose}) {
         </div>
 
         {[
-          {label:"URL VIDEO",key:"url",ph:"https://tiktok.com/@...",ta:false},
-          {label:"TITLE",key:"title",ph:"Apa yang menarik?",ta:false},
-          {label:"SAVED BY",key:"savedBy",ph:"Nama kau",ta:false},
-          {label:"NOTES",key:"notes",ph:"Notes pasal video ni...",ta:true},
+          {label:t.urlLabel,key:"url",ph:t.urlPh,ta:false},
+          {label:t.titleLabel,key:"title",ph:t.titlePh,ta:false},
+          {label:t.savedByLabel,key:"savedBy",ph:t.savedByPh,ta:false},
+          {label:t.notesLabel,key:"notes",ph:t.notesPh,ta:true},
         ].map(({label,key,ph,ta})=>(
           <div key={key} style={{marginBottom:14}}>
             <div style={{fontSize:10,fontWeight:700,color:"#636366",letterSpacing:1.8,marginBottom:6}}>{label}</div>
@@ -290,13 +399,13 @@ function Modal({onAdd,onClose}) {
 
         <div style={{display:"flex",gap:12,marginBottom:22,alignItems:"flex-end"}}>
           <div style={{flex:1}}>
-            <div style={{fontSize:10,fontWeight:700,color:"#636366",letterSpacing:1.8,marginBottom:6}}>KATEGORI</div>
+            <div style={{fontSize:10,fontWeight:700,color:"#636366",letterSpacing:1.8,marginBottom:6}}>{t.catLabel}</div>
             <select value={f.category} onChange={e=>set("category",e.target.value)} style={{...inp,cursor:"pointer"}}>
-              {CATEGORIES.map(c=><option key={c} style={{background:"#1c1c1e"}}>{c}</option>)}
+              {(t.cats||CATEGORIES).map(c=><option key={c} style={{background:"#1c1c1e"}}>{c}</option>)}
             </select>
           </div>
           <div style={{paddingBottom:8}}>
-            <div style={{fontSize:10,fontWeight:700,color:"#636366",letterSpacing:1.8,marginBottom:8}}>RATING</div>
+            <div style={{fontSize:10,fontWeight:700,color:"#636366",letterSpacing:1.8,marginBottom:8}}>{t.ratingLabel}</div>
             <Stars val={f.rating} onChange={r=>set("rating",r)}/>
           </div>
         </div>
@@ -308,7 +417,7 @@ function Modal({onAdd,onClose}) {
           cursor:saving?"not-allowed":"pointer",
           boxShadow:saving?"none":`0 8px 20px ${p.glow}`,
           transition:"all 0.15s"}}>
-          {saving?"Saving...":"Simpan →"}
+          {saving?t.saving:t.simpan}
         </button>
       </div>
     </div>
@@ -316,6 +425,8 @@ function Modal({onAdd,onClose}) {
 }
 
 function App() {
+  const [lang, setLang] = useState("ms");
+  const t = LANG[lang];
   const [videos,   setVideos]   = useState([]);
   const [loading,  setLoading]  = useState(true);
   const [error,    setError]    = useState(null);
@@ -341,8 +452,8 @@ function App() {
   },[]);
 
   const showToast = msg=>{ setToast(msg); setTimeout(()=>setToast(null),2000); };
-  const updateVideo = (key,ch)=>{ db.ref(`videos/${key}`).update(ch); showToast("Updated ✓"); };
-  const deleteVideo = key=>{ db.ref(`videos/${key}`).remove(); showToast("Removed"); };
+  const updateVideo = (key,ch)=>{ db.ref(`videos/${key}`).update(ch); showToast(t.updated); };
+  const deleteVideo = key=>{ db.ref(`videos/${key}`).remove(); showToast(t.removed); };
 
   const list = videos
     .filter(v=>filter==="All"||v.platform===filter)
@@ -389,7 +500,7 @@ function App() {
         <div style={{padding:"13px 18px 10px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:10}}>
           <div>
             <div style={{fontSize:20,fontWeight:900,letterSpacing:-0.8,color:"#f5f5f7"}}>TrendVault</div>
-            <div style={{fontSize:8.5,letterSpacing:2.8,color:"#636366",fontWeight:600,marginTop:1}}>VIDEO INSPIRATION</div>
+            <div style={{fontSize:8.5,letterSpacing:2.8,color:"#636366",fontWeight:600,marginTop:1}}>{t.appSub}</div>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:7,flexShrink:0}}>
             {[{v:stats.total,c:"#8e8e93"},{v:stats.prog,c:"#FF9F0A"},{v:stats.used,c:"#30D158"}].map((s,i)=>(
@@ -420,12 +531,12 @@ function App() {
               color:sel?(pp?.accent||"#f5f5f7"):"#8e8e93",
               fontSize:12,fontWeight:700,cursor:"pointer",whiteSpace:"nowrap",flexShrink:0,
               boxShadow:sel&&pp?`0 0 12px ${pp.glow}`:"none",
-              transition:"all 0.18s"}}>{pl==="All"?"All":pl}</button>;
+              transition:"all 0.18s"}}>{pl==="All"?t.all:pl}</button>;
           })}
           <div style={{width:1,height:18,background:"rgba(255,255,255,0.1)",flexShrink:0}}/>
           <div style={{position:"relative",flexShrink:0}}>
             <span style={{position:"absolute",left:10,top:"50%",transform:"translateY(-50%)",fontSize:12,color:"#636366",pointerEvents:"none"}}>⌕</span>
-            <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search..."
+            <input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t.search}
               style={{background:"rgba(255,255,255,0.06)",border:"1.5px solid rgba(255,255,255,0.08)",
                 borderRadius:20,padding:"6px 12px 6px 26px",color:"#f5f5f7",fontSize:12,outline:"none",width:120,transition:"all 0.2s"}}
               onFocus={e=>{e.target.style.border="1.5px solid rgba(255,255,255,0.25)";e.target.style.width="155px";}}
@@ -434,8 +545,8 @@ function App() {
           <select value={sort} onChange={e=>setSort(e.target.value)}
             style={{background:"rgba(255,255,255,0.06)",border:"1.5px solid rgba(255,255,255,0.08)",
               borderRadius:20,padding:"6px 11px",color:"#8e8e93",fontSize:12,outline:"none",cursor:"pointer",flexShrink:0}}>
-            <option value="latest" style={{background:"#1c1c1e"}}>Latest</option>
-            <option value="rating" style={{background:"#1c1c1e"}}>Top Rated</option>
+            <option value="latest" style={{background:"#1c1c1e"}}>{t.latest}</option>
+            <option value="rating" style={{background:"#1c1c1e"}}>{t.topRated}</option>
           </select>
         </div>
       </div>
@@ -445,7 +556,7 @@ function App() {
         {loading?(
           <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",minHeight:"60vh",gap:16}}>
             <div style={{width:40,height:40,borderRadius:"50%",border:"3px solid rgba(255,255,255,0.1)",borderTop:"3px solid #8e8e93",animation:"spin 0.8s linear infinite"}}/>
-            <div style={{fontSize:13,color:"#636366"}}>Connecting...</div>
+            <div style={{fontSize:13,color:"#636366"}}>{t.connecting}</div>
           </div>
         ):error?(
           <div style={{textAlign:"center",padding:"60px 20px"}}>
@@ -494,13 +605,9 @@ function App() {
 
             {/* Text */}
             <div style={{textAlign:"center",maxWidth:260}}>
-              <div style={{fontSize:22,fontWeight:900,color:"#f5f5f7",letterSpacing:-0.5,marginBottom:10,
-                background:"linear-gradient(135deg,#f5f5f7,rgba(255,255,255,0.4))",
-                WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>
-                Vault Kosong
-              </div>
+              <div style={{fontSize:22,fontWeight:900,color:"#f5f5f7",letterSpacing:-0.5,marginBottom:10,background:"linear-gradient(135deg,#f5f5f7,rgba(255,255,255,0.4))",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{t.vaultEmpty}</div>
               <div style={{fontSize:13,color:"#636366",lineHeight:1.6,marginBottom:28}}>
-                Simpan video trending dari TikTok, Instagram & Facebook untuk dijadikan inspirasi team kau
+                {t.vaultDesc}
               </div>
               <button onClick={()=>setModal(true)} style={{
                 background:"linear-gradient(135deg,#FE2C55,#B33AB4)",
@@ -510,12 +617,12 @@ function App() {
                 transition:"all 0.2s"}}
                 onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.boxShadow="0 12px 32px rgba(254,44,85,0.45)";}}
                 onMouseLeave={e=>{e.currentTarget.style.transform="";e.currentTarget.style.boxShadow="0 8px 24px rgba(254,44,85,0.35)";}}
-              >+ Save Video Pertama</button>
+              >{t.saveFirst}</button>
             </div>
           </div>
         ):(
           <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(290px,1fr))",gap:16}}>
-            {list.map(v=><Card key={v.key} v={v} onUpdate={updateVideo} onDelete={deleteVideo}/>)}
+            {list.map(v=><Card key={v.key} v={v} onUpdate={updateVideo} onDelete={deleteVideo} t={t}/>)}
           </div>
         )}
       </div>
@@ -525,14 +632,14 @@ function App() {
         <div style={{display:"inline-flex",alignItems:"center",gap:7,
           background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.08)",
           borderRadius:20,padding:"6px 16px"}}>
-          <span style={{fontSize:11,color:"#636366"}}>Built by</span>
+          <span style={{fontSize:11,color:"#636366"}}>{t.builtBy}</span>
           <span style={{fontSize:12,fontWeight:900,background:"linear-gradient(90deg,#FE2C55,#B33AB4)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>Ali</span>
           <span style={{fontSize:11,color:"#3a3a3c"}}>·</span>
           <span style={{fontSize:12,fontWeight:900,background:"linear-gradient(90deg,#1877F2,#B33AB4)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>TMOMO Buddy</span>
         </div>
       </div>
 
-      {modal&&<Modal onAdd={()=>{}} onClose={()=>setModal(false)}/>}
+      {modal&&<Modal onAdd={()=>{}} onClose={()=>setModal(false)} t={t} lang={lang}/>}
     </div>
   );
 }
