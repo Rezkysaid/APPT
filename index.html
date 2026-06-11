@@ -453,13 +453,64 @@ function App() {
             <div style={{fontSize:12,color:"#636366"}}>{error}</div>
           </div>
         ):list.length===0?(
-          <div style={{textAlign:"center",padding:"80px 20px"}}>
-            <div style={{width:70,height:70,borderRadius:18,margin:"0 auto 16px",
-              background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.08)",
-              display:"flex",alignItems:"center",justifyContent:"center",fontSize:26,color:"#636366"}}>▶</div>
-            <div style={{fontSize:16,fontWeight:700,color:"#8e8e93"}}>Vault kosong</div>
-            <div style={{fontSize:13,color:"#636366",marginTop:5}}>
-              Tekan <span style={{color:"#FE2C55",fontWeight:700}}>+ Save</span> untuk mula
+          <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",minHeight:"65vh",padding:"40px 20px",position:"relative"}}>
+            {/* Decorative rings */}
+            <div style={{position:"relative",width:200,height:200,marginBottom:40}}>
+              {/* Outer ring */}
+              <div style={{position:"absolute",inset:0,borderRadius:"50%",border:"1px solid rgba(255,255,255,0.06)",animation:"drift 8s ease-in-out infinite"}}/>
+              {/* Mid ring */}
+              <div style={{position:"absolute",inset:16,borderRadius:"50%",border:"1px solid rgba(254,44,85,0.12)",animation:"drift 6s ease-in-out infinite reverse"}}/>
+              {/* Inner ring */}
+              <div style={{position:"absolute",inset:32,borderRadius:"50%",border:"1px solid rgba(179,58,180,0.15)",animation:"drift 10s ease-in-out infinite"}}/>
+              {/* Center glow dot */}
+              <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
+                <div style={{position:"relative"}}>
+                  <div style={{width:80,height:80,borderRadius:"50%",
+                    background:"linear-gradient(135deg,rgba(254,44,85,0.15),rgba(24,119,242,0.15))",
+                    border:"1px solid rgba(255,255,255,0.08)",
+                    display:"flex",alignItems:"center",justifyContent:"center",
+                    backdropFilter:"blur(20px)"}}>
+                    <div style={{width:40,height:40,borderRadius:"50%",
+                      background:"linear-gradient(135deg,#FE2C55,#B33AB4)",
+                      display:"flex",alignItems:"center",justifyContent:"center",
+                      boxShadow:"0 0 30px rgba(254,44,85,0.4), 0 0 60px rgba(179,58,180,0.2)",
+                      fontSize:16,color:"#fff"}}>▶</div>
+                  </div>
+                  {/* Orbit dot TikTok */}
+                  <div style={{position:"absolute",top:-4,right:-4,width:18,height:18,borderRadius:"50%",
+                    background:"#FE2C55",boxShadow:"0 0 12px rgba(254,44,85,0.6)",
+                    display:"flex",alignItems:"center",justifyContent:"center",fontSize:7,color:"#fff",fontWeight:900}}>TK</div>
+                  {/* Orbit dot IG */}
+                  <div style={{position:"absolute",bottom:-4,left:-4,width:18,height:18,borderRadius:"50%",
+                    background:"linear-gradient(135deg,#833AB4,#E1306C)",boxShadow:"0 0 12px rgba(179,58,180,0.6)",
+                    display:"flex",alignItems:"center",justifyContent:"center",fontSize:7,color:"#fff",fontWeight:900}}>IG</div>
+                  {/* Orbit dot FB */}
+                  <div style={{position:"absolute",top:-4,left:-8,width:18,height:18,borderRadius:"50%",
+                    background:"#1877F2",boxShadow:"0 0 12px rgba(24,119,242,0.6)",
+                    display:"flex",alignItems:"center",justifyContent:"center",fontSize:7,color:"#fff",fontWeight:900}}>FB</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Text */}
+            <div style={{textAlign:"center",maxWidth:260}}>
+              <div style={{fontSize:22,fontWeight:900,color:"#f5f5f7",letterSpacing:-0.5,marginBottom:10,
+                background:"linear-gradient(135deg,#f5f5f7,rgba(255,255,255,0.4))",
+                WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>
+                Vault Kosong
+              </div>
+              <div style={{fontSize:13,color:"#636366",lineHeight:1.6,marginBottom:28}}>
+                Simpan video trending dari TikTok, Instagram & Facebook untuk dijadikan inspirasi team kau
+              </div>
+              <button onClick={()=>setModal(true)} style={{
+                background:"linear-gradient(135deg,#FE2C55,#B33AB4)",
+                border:"none",borderRadius:14,padding:"12px 28px",
+                color:"#fff",fontWeight:800,fontSize:14,cursor:"pointer",
+                boxShadow:"0 8px 24px rgba(254,44,85,0.35), 0 0 0 1px rgba(255,255,255,0.1) inset",
+                transition:"all 0.2s"}}
+                onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.boxShadow="0 12px 32px rgba(254,44,85,0.45)";}}
+                onMouseLeave={e=>{e.currentTarget.style.transform="";e.currentTarget.style.boxShadow="0 8px 24px rgba(254,44,85,0.35)";}}
+              >+ Save Video Pertama</button>
             </div>
           </div>
         ):(
